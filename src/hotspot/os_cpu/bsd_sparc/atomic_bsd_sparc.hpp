@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef OS_CPU_LINUX_SPARC_VM_ATOMIC_LINUX_SPARC_INLINE_HPP
-#define OS_CPU_LINUX_SPARC_VM_ATOMIC_LINUX_SPARC_INLINE_HPP
+#ifndef OS_CPU_BSD_SPARC_VM_ATOMIC_BSD_SPARC_INLINE_HPP
+#define OS_CPU_BSD_SPARC_VM_ATOMIC_BSD_SPARC_INLINE_HPP
 
 // Implementation of class atomic
 
@@ -154,4 +154,4 @@ inline T Atomic::PlatformCmpxchg<8>::operator()(T exchange_value,
   return rv;
 }
 
-#endif // OS_CPU_LINUX_SPARC_VM_ATOMIC_LINUX_SPARC_INLINE_HPP
+#endif // OS_CPU_BSD_SPARC_VM_ATOMIC_BSD_SPARC_INLINE_HPP

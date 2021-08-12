@@ -22,16 +22,16 @@
  *
  */
 
-package sun.jvm.hotspot.debugger.linux.sparc;
+package sun.jvm.hotspot.debugger.bsd.sparc;
 
 import sun.jvm.hotspot.debugger.*;
 import sun.jvm.hotspot.debugger.sparc.*;
-import sun.jvm.hotspot.debugger.linux.*;
+import sun.jvm.hotspot.debugger.bsd.*;
 
-public class LinuxSPARCThreadContext extends SPARCThreadContext {
-  private LinuxDebugger debugger;
+public class BsdSPARCThreadContext extends SPARCThreadContext {
+  private BsdDebugger debugger;
 
-  public LinuxSPARCThreadContext(LinuxDebugger debugger) {
+  public BsdSPARCThreadContext(BsdDebugger debugger) {
     super();
     this.debugger = debugger;
   }

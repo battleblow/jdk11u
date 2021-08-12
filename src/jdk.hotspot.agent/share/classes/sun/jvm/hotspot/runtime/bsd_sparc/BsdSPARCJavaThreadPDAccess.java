@@ -22,7 +22,7 @@
  *
  */
 
-package sun.jvm.hotspot.runtime.linux_sparc;
+package sun.jvm.hotspot.runtime.bsd_sparc;
 
 import java.io.*;
 import java.util.*;
@@ -33,7 +33,7 @@ import sun.jvm.hotspot.runtime.sparc.*;
 import sun.jvm.hotspot.types.*;
 import sun.jvm.hotspot.utilities.*;
 
-public class LinuxSPARCJavaThreadPDAccess implements JavaThreadPDAccess {
+public class BsdSPARCJavaThreadPDAccess implements JavaThreadPDAccess {
   private static AddressField baseOfStackPointerField;
   private static AddressField postJavaStateField;
   private static AddressField osThreadField;
