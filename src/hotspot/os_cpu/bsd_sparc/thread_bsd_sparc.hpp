@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef OS_CPU_LINUX_SPARC_VM_THREAD_LINUX_SPARC_HPP
-#define OS_CPU_LINUX_SPARC_VM_THREAD_LINUX_SPARC_HPP
+#ifndef OS_CPU_BSD_SPARC_VM_THREAD_BSD_SPARC_HPP
+#define OS_CPU_BSD_SPARC_VM_THREAD_BSD_SPARC_HPP
 
 private:
 
@@ -95,4 +95,4 @@ public:
   static void enable_register_stack_guard() {}
   static void disable_register_stack_guard() {}
 
-#endif // OS_CPU_LINUX_SPARC_VM_THREAD_LINUX_SPARC_HPP
+#endif // OS_CPU_BSD_SPARC_VM_THREAD_BSD_SPARC_HPP

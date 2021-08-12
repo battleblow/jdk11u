@@ -22,11 +22,11 @@
  *
  */
 
-#ifndef OS_CPU_LINUX_SPARC_VM_OS_LINUX_SPARC_HPP
-#define OS_CPU_LINUX_SPARC_VM_OS_LINUX_SPARC_HPP
+#ifndef OS_CPU_BSD_SPARC_VM_OS_BSD_SPARC_HPP
+#define OS_CPU_BSD_SPARC_VM_OS_BSD_SPARC_HPP
 
   //
-  // NOTE: we are back in class os here, not Linux
+  // NOTE: we are back in class os here, not Bsd
   //
   static int32_t  (*atomic_xchg_func)        (int32_t,  volatile int32_t*);
   static int32_t  (*atomic_cmpxchg_func)     (int32_t,  volatile int32_t*, int32_t);
@@ -46,4 +46,4 @@
   // Note: Currently only used in 64 bit Windows implementations
   static bool register_code_area(char *low, char *high) { return true; }
 
-#endif // OS_CPU_LINUX_SPARC_VM_OS_LINUX_SPARC_HPP
+#endif // OS_CPU_BSD_SPARC_VM_OS_BSD_SPARC_HPP

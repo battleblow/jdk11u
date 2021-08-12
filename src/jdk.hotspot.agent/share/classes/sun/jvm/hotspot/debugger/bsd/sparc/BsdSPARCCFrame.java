@@ -22,18 +22,18 @@
  *
  */
 
-package sun.jvm.hotspot.debugger.linux.sparc;
+package sun.jvm.hotspot.debugger.bsd.sparc;
 
 import sun.jvm.hotspot.debugger.*;
 import sun.jvm.hotspot.debugger.sparc.*;
-import sun.jvm.hotspot.debugger.linux.*;
+import sun.jvm.hotspot.debugger.bsd.*;
 import sun.jvm.hotspot.debugger.cdbg.*;
 import sun.jvm.hotspot.debugger.cdbg.basic.*;
 
-final public class LinuxSPARCCFrame extends BasicCFrame {
+final public class BsdSPARCCFrame extends BasicCFrame {
    // package/class internals only
 
-   public LinuxSPARCCFrame(LinuxDebugger dbg, Address sp, Address pc, int address_size) {
+   public BsdSPARCCFrame(BsdDebugger dbg, Address sp, Address pc, int address_size) {
       super(dbg.getCDebugger());
       this.sp = sp;
       this.pc = pc;
@@ -70,12 +70,12 @@ final public class LinuxSPARCCFrame extends BasicCFrame {
       if (nextPC == null) {
         return null;
       }
-      return new LinuxSPARCCFrame(dbg, nextSP, nextPC,address_size);
+      return new BsdSPARCCFrame(dbg, nextSP, nextPC,address_size);
    }
 
    public static int SPARC_STACK_BIAS;
    private static int address_size;
    private Address pc;
    private Address sp;
-   private LinuxDebugger dbg;
+   private BsdDebugger dbg;
 }

@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef OS_CPU_LINUX_SPARC_VM_ORDERACCESS_LINUX_SPARC_HPP
-#define OS_CPU_LINUX_SPARC_VM_ORDERACCESS_LINUX_SPARC_HPP
+#ifndef OS_CPU_BSD_SPARC_VM_ORDERACCESS_BSD_SPARC_HPP
+#define OS_CPU_BSD_SPARC_VM_ORDERACCESS_BSD_SPARC_HPP
 
 // Included in orderAccess.hpp header file.
 
@@ -48,4 +48,4 @@ inline void OrderAccess::fence() {
   __asm__ volatile ("membar  #StoreLoad" : : : "memory");
 }
 
-#endif // OS_CPU_LINUX_SPARC_VM_ORDERACCESS_LINUX_SPARC_HPP
+#endif // OS_CPU_BSD_SPARC_VM_ORDERACCESS_BSD_SPARC_HPP
