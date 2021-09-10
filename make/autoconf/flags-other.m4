@@ -121,7 +121,10 @@ AC_DEFUN([FLAGS_SETUP_ASFLAGS],
     fi
   fi
   if test "x$OPENJDK_TARGET_OS" = xbsd; then
-    JVM_BASIC_ASFLAGS="-x assembler-with-cpp -mno-omit-leaf-frame-pointer"
+    JVM_BASIC_ASFLAGS="-x assembler-with-cpp"
+    if test "x$OPENJDK_TARGET_CPU_ARCH" != "xsparc"; then
+      JVM_BASIC_ASFLAGS+=" -mno-omit-leaf-frame-pointer"
+    fi
     if test "x$TOOLCHAIN_TYPE" = xclang; then
       JVM_BASIC_ASFLAGS+=" -mstack-alignment=16"
     fi
