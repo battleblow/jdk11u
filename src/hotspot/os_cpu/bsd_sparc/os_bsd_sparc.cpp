@@ -55,9 +55,9 @@
 
 // Bsd/Sparc has rather obscure naming of registers in sigcontext
 // different between 32 and 64 bits
-#define SIG_PC(x) ((x)->sigc_regs.tpc)
-#define SIG_NPC(x) ((x)->sigc_regs.tnpc)
-#define SIG_REGS(x) ((x)->sigc_regs)
+#define SIG_PC(x) ((x)->sc_pc)
+#define SIG_NPC(x) ((x)->sc_npc)
+#define SIG_REGS(x) ((intptr_t*)((x)->sc_sp + STACK_BIAS))
 
 // those are to reference registers in sigcontext
 enum {
@@ -168,28 +168,27 @@ void os::print_context(outputStream *st, const void *context) {
 
   st->print_cr(" G1=" INTPTR_FORMAT " G2=" INTPTR_FORMAT
                " G3=" INTPTR_FORMAT " G4=" INTPTR_FORMAT,
-               SIG_REGS(sc).u_regs[CON_G1],
-               SIG_REGS(sc).u_regs[CON_G2],
-               SIG_REGS(sc).u_regs[CON_G3],
-               SIG_REGS(sc).u_regs[CON_G4]);
+               SIG_REGS(sc)[CON_G1],
+               SIG_REGS(sc)[CON_G2],
+               SIG_REGS(sc)[CON_G3],
+               SIG_REGS(sc)[CON_G4]);
   st->print_cr(" G5=" INTPTR_FORMAT " G6=" INTPTR_FORMAT
-               " G7=" INTPTR_FORMAT " Y=0x%x",
-               SIG_REGS(sc).u_regs[CON_G5],
-               SIG_REGS(sc).u_regs[CON_G6],
-               SIG_REGS(sc).u_regs[CON_G7],
-               SIG_REGS(sc).y);
+               " G7=" INTPTR_FORMAT,
+               SIG_REGS(sc)[CON_G5],
+               SIG_REGS(sc)[CON_G6],
+               SIG_REGS(sc)[CON_G7]);
   st->print_cr(" O0=" INTPTR_FORMAT " O1=" INTPTR_FORMAT
                " O2=" INTPTR_FORMAT " O3=" INTPTR_FORMAT,
-               SIG_REGS(sc).u_regs[CON_O0],
-               SIG_REGS(sc).u_regs[CON_O1],
-               SIG_REGS(sc).u_regs[CON_O2],
-               SIG_REGS(sc).u_regs[CON_O3]);
+               SIG_REGS(sc)[CON_O0],
+               SIG_REGS(sc)[CON_O1],
+               SIG_REGS(sc)[CON_O2],
+               SIG_REGS(sc)[CON_O3]);
   st->print_cr(" O4=" INTPTR_FORMAT " O5=" INTPTR_FORMAT
                " O6=" INTPTR_FORMAT " O7=" INTPTR_FORMAT,
-               SIG_REGS(sc).u_regs[CON_O4],
-               SIG_REGS(sc).u_regs[CON_O5],
-               SIG_REGS(sc).u_regs[CON_O6],
-               SIG_REGS(sc).u_regs[CON_O7]);
+               SIG_REGS(sc)[CON_O4],
+               SIG_REGS(sc)[CON_O5],
+               SIG_REGS(sc)[CON_O6],
+               SIG_REGS(sc)[CON_O7]);
 
 
   intptr_t *sp = (intptr_t *)os::Bsd::ucontext_get_sp(uc);
@@ -248,23 +247,23 @@ void os::print_register_info(outputStream *st, const void *context) {
   st->cr();
 
   // this is only for the "general purpose" registers
-  st->print("G1="); print_location(st, SIG_REGS(sc).u_regs[CON_G1]);
-  st->print("G2="); print_location(st, SIG_REGS(sc).u_regs[CON_G2]);
-  st->print("G3="); print_location(st, SIG_REGS(sc).u_regs[CON_G3]);
-  st->print("G4="); print_location(st, SIG_REGS(sc).u_regs[CON_G4]);
-  st->print("G5="); print_location(st, SIG_REGS(sc).u_regs[CON_G5]);
-  st->print("G6="); print_location(st, SIG_REGS(sc).u_regs[CON_G6]);
-  st->print("G7="); print_location(st, SIG_REGS(sc).u_regs[CON_G7]);
+  st->print("G1="); print_location(st, SIG_REGS(sc)[CON_G1]);
+  st->print("G2="); print_location(st, SIG_REGS(sc)[CON_G2]);
+  st->print("G3="); print_location(st, SIG_REGS(sc)[CON_G3]);
+  st->print("G4="); print_location(st, SIG_REGS(sc)[CON_G4]);
+  st->print("G5="); print_location(st, SIG_REGS(sc)[CON_G5]);
+  st->print("G6="); print_location(st, SIG_REGS(sc)[CON_G6]);
+  st->print("G7="); print_location(st, SIG_REGS(sc)[CON_G7]);
   st->cr();
 
-  st->print("O0="); print_location(st, SIG_REGS(sc).u_regs[CON_O0]);
-  st->print("O1="); print_location(st, SIG_REGS(sc).u_regs[CON_O1]);
-  st->print("O2="); print_location(st, SIG_REGS(sc).u_regs[CON_O2]);
-  st->print("O3="); print_location(st, SIG_REGS(sc).u_regs[CON_O3]);
-  st->print("O4="); print_location(st, SIG_REGS(sc).u_regs[CON_O4]);
-  st->print("O5="); print_location(st, SIG_REGS(sc).u_regs[CON_O5]);
-  st->print("O6="); print_location(st, SIG_REGS(sc).u_regs[CON_O6]);
-  st->print("O7="); print_location(st, SIG_REGS(sc).u_regs[CON_O7]);
+  st->print("O0="); print_location(st, SIG_REGS(sc)[CON_O0]);
+  st->print("O1="); print_location(st, SIG_REGS(sc)[CON_O1]);
+  st->print("O2="); print_location(st, SIG_REGS(sc)[CON_O2]);
+  st->print("O3="); print_location(st, SIG_REGS(sc)[CON_O3]);
+  st->print("O4="); print_location(st, SIG_REGS(sc)[CON_O4]);
+  st->print("O5="); print_location(st, SIG_REGS(sc)[CON_O5]);
+  st->print("O6="); print_location(st, SIG_REGS(sc)[CON_O6]);
+  st->print("O7="); print_location(st, SIG_REGS(sc)[CON_O7]);
   st->cr();
 
   st->print("L0="); print_location(st, sp[L0->sp_offset_in_saved_window()]);
@@ -301,7 +300,7 @@ void os::Bsd::ucontext_set_pc(ucontext_t* uc, address pc) {
 
 intptr_t* os::Bsd::ucontext_get_sp(const ucontext_t *uc) {
   return (intptr_t*)
-    ((intptr_t)SIG_REGS((sigcontext*)uc).u_regs[CON_O6] + STACK_BIAS);
+    ((intptr_t)SIG_REGS((sigcontext*)uc)[CON_O6] + STACK_BIAS);
 }
 
 // not used on Sparc
@@ -351,21 +350,6 @@ inline static bool checkOverflow(sigcontext* uc,
       // it as a hint.
       tty->print_raw_cr("Please check if any of your loaded .so files has "
                         "enabled executable stack (see man page execstack(8))");
-    } else {
-      // Accessing stack address below sp may cause SEGV if current
-      // thread has MAP_GROWSDOWN stack. This should only happen when
-      // current thread was created by user code with MAP_GROWSDOWN flag
-      // and then attached to VM. See notes in os_bsd.cpp.
-      if (thread->osthread()->expanding_stack() == 0) {
-        thread->osthread()->set_expanding_stack();
-        if (os::Bsd::manually_expand_stack(thread, addr)) {
-          thread->osthread()->clear_expanding_stack();
-          return true;
-        }
-        thread->osthread()->clear_expanding_stack();
-      } else {
-        fatal("recursive segv. expanding stack.");
-      }
     }
   }
   return false;
@@ -450,7 +434,7 @@ inline static bool checkZombie(sigcontext* uc, address* pc, address* stub) {
 
     // At the stub it needs to look like a call from the caller of this
     // method (not a call from the segv site).
-    *pc = (address)SIG_REGS(uc).u_regs[CON_O7];
+    *pc = (address)SIG_REGS(uc)[CON_O7];
     return true;
   }
   return false;
@@ -469,7 +453,7 @@ inline static bool checkICMiss(sigcontext* uc, address* pc, address* stub) {
     *stub = SharedRuntime::get_ic_miss_stub();
     // At the stub it needs to look like a call from the caller of this
     // method (not a call from the segv site).
-    *pc = (address)SIG_REGS(uc).u_regs[CON_O7];
+    *pc = (address)SIG_REGS(uc)[CON_O7];
     return true;
   }
 #endif  // COMPILER2
@@ -650,14 +634,6 @@ JVM_handle_bsd_signal(int sig,
 
 void os::Bsd::init_thread_fpu_state(void) {
   // Nothing to do
-}
-
-int os::Bsd::get_fpu_control_word() {
-  return 0;
-}
-
-void os::Bsd::set_fpu_control_word(int fpu) {
-  // nothing
 }
 
 bool os::is_allocatable(size_t bytes) {
