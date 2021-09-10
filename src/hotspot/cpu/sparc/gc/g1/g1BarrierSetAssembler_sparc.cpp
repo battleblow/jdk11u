@@ -104,7 +104,7 @@ static u_char* satb_log_enqueue_with_frame_end = NULL;
 static address satb_log_enqueue_frameless = NULL;
 static u_char* satb_log_enqueue_frameless_end = NULL;
 
-static int EnqueueCodeSize = 128 DEBUG_ONLY( + 256); // Instructions?
+static int EnqueueCodeSize = 160 DEBUG_ONLY( + 256); // Instructions?
 
 static void generate_satb_log_enqueue(bool with_frame) {
   BufferBlob* bb = BufferBlob::create("enqueue_with_frame", EnqueueCodeSize);
