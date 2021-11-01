@@ -297,7 +297,7 @@ void MacroAssembler::safepoint_poll(Label& slow_path) {
     ldr(rscratch1, Address(rthread, Thread::polling_page_offset()));
     tbnz(rscratch1, exact_log2(SafepointMechanism::poll_bit()), slow_path);
   } else {
-    unsigned long offset;
+    uint64_t offset;
     adrp(rscratch1, ExternalAddress(SafepointSynchronize::address_of_state()), offset);
     ldrw(rscratch1, Address(rscratch1, offset));
     assert(SafepointSynchronize::_not_synchronized == 0, "rewrite this code");
@@ -405,7 +405,7 @@ void MacroAssembler::far_call(Address entry, CodeBuffer *cbuf, Register tmp) {
   assert(CodeCache::find_blob(entry.target()) != NULL,
          "destination of far call not found in code cache");
   if (far_branches()) {
-    uintptr_t offset;
+    uint64_t offset;
     // We can use ADRP here because we know that the total size of
     // the code cache cannot exceed 2Gb.
     adrp(tmp, entry, offset);
@@ -423,7 +423,7 @@ void MacroAssembler::far_jump(Address entry, CodeBuffer *cbuf, Register tmp) {
   assert(CodeCache::find_blob(entry.target()) != NULL,
          "destination of far call not found in code cache");
   if (far_branches()) {
-    uintptr_t offset;
+    uint64_t offset;
     // We can use ADRP here because we know that the total size of
     // the code cache cannot exceed 2Gb.
     adrp(tmp, entry, offset);
@@ -4199,7 +4199,7 @@ void MacroAssembler::get_polling_page(Register dest, address page, relocInfo::re
   if (SafepointMechanism::uses_thread_local_poll()) {
     ldr(dest, Address(rthread, Thread::polling_page_offset()));
   } else {
-    unsigned long off;
+    uint64_t off;
     adrp(dest, Address(page, rtype), off);
     assert(off == 0, "polling page must be page aligned");
   }
