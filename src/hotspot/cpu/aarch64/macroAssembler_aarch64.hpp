@@ -475,24 +475,16 @@ public:
     mov_immediate64(dst, (uint64_t)addr);
   }
 
-  inline void mov(Register dst, uint64_t imm64)
-  {
-    mov_immediate64(dst, imm64);
-  }
+  inline void mov(Register dst, int imm64)                { mov_immediate64(dst, (uint64_t)imm64); }
+  inline void mov(Register dst, long imm64)               { mov_immediate64(dst, (uint64_t)imm64); }
+  inline void mov(Register dst, long long imm64)          { mov_immediate64(dst, (uint64_t)imm64); }
+  inline void mov(Register dst, unsigned int imm64)       { mov_immediate64(dst, (uint64_t)imm64); }
+  inline void mov(Register dst, unsigned long imm64)      { mov_immediate64(dst, (uint64_t)imm64); }
+  inline void mov(Register dst, unsigned long long imm64) { mov_immediate64(dst, (uint64_t)imm64); }
 
   inline void movw(Register dst, uint32_t imm32)
   {
     mov_immediate32(dst, imm32);
-  }
-
-  inline void mov(Register dst, int64_t l)
-  {
-    mov(dst, (uint64_t)l);
-  }
-
-  inline void mov(Register dst, int i)
-  {
-    mov(dst, (int64_t)i);
   }
 
   void mov(Register dst, RegisterOrConstant src) {
