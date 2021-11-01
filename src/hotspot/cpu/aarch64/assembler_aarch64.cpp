@@ -1532,7 +1532,7 @@ void Address::lea(MacroAssembler *as, Register r) const {
   }
 }
 
-void Assembler::adrp(Register reg1, const Address &dest, uintptr_t &byte_offset) {
+void Assembler::adrp(Register reg1, const Address &dest, uint64_t &byte_offset) {
   ShouldNotReachHere();
 }
 
