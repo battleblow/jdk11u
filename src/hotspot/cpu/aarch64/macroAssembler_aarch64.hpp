@@ -490,6 +490,11 @@ public:
     mov(dst, (uint64_t)l);
   }
 
+  inline void mov(Register dst, intptr_t l)
+  {
+    mov(dst, (uint64_t)l);
+  }
+
   inline void mov(Register dst, int i)
   {
     mov(dst, (int64_t)i);
