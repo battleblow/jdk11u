@@ -1492,7 +1492,7 @@ void MacroAssembler::movptr(Register r, uintptr_t imm64) {
 #ifndef PRODUCT
   {
     char buffer[64];
-    snprintf(buffer, sizeof(buffer), PTR64_FORMAT, imm64);
+    snprintf(buffer, sizeof(buffer), "0x%"PRIX64, (uint64_t)imm64);
     block_comment(buffer);
   }
 #endif
@@ -5811,7 +5811,7 @@ void MacroAssembler::char_array_compress(Register src, Register dst, Register le
 // Save whatever non-callee save context might get clobbered by
 // Thread::current.
 void MacroAssembler::get_thread(Register dst) {
-  RegSet saved_regs = RegSet::range(r0, r18) + lr - dst;
+  RegSet saved_regs = RegSet::range(r0, r18_tls) + lr - dst;
   push(saved_regs, sp);
 
   MacroAssembler::call_VM_leaf_base(CAST_FROM_FN_PTR(address, Thread::current), 0);
