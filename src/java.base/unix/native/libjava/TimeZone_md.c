@@ -898,13 +898,10 @@ getGMTOffsetID()
         return strdup("GMT");
     }
 
-<<<<<<< HEAD
-=======
 #if defined(MACOSX)
     time_t gmt_offset;
     gmt_offset = (time_t)localtm.tm_gmtoff;
     if (gmt_offset == 0) {
->>>>>>> master
         return strdup("GMT");
     }
 #else
