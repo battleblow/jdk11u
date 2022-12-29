@@ -317,7 +317,7 @@ AC_DEFUN([BASIC_CHECK_GREP],
   NEEDLE_SPACES='ccc bbb aaa'
   NEEDLE_LIST=${NEEDLE_SPACES// /$'\n'}
   RESULT="$($GREP -Fvx "$STACK_LIST" <<< "$NEEDLE_LIST")"
-  if test "x$RESULT" == "x"; then
+  if test "x$RESULT" = "x"; then
     AC_MSG_RESULT([yes])
   else
     if test "x$OPENJDK_TARGET_OS" = "xaix"; then
