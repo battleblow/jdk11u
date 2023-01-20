@@ -284,7 +284,7 @@ JVM_handle_bsd_signal(int sig,
 
   // Moved SafeFetch32 handling outside thread!=NULL conditional block to make
   // it work if no associated JavaThread object exists.
-  if (uc) {
+  if ((sig == SIGSEGV || sig == SIGBUS) && uc) {
     address const pc = os::Bsd::ucontext_get_pc(uc);
     if (pc && StubRoutines::is_safefetch_fault(pc)) {
       os::Bsd::ucontext_set_pc(uc, StubRoutines::continuation_for_safefetch_fault(pc));
