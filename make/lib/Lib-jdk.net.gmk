@@ -27,7 +27,7 @@ include LibCommon.gmk
 
 ################################################################################
 
-ifneq ($(filter $(OPENJDK_TARGET_OS), solaris linux macosx bsd), )
+ifeq ($(call isTargetOs, solaris linux macosx bsd), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBEXTNET, \
       NAME := extnet, \

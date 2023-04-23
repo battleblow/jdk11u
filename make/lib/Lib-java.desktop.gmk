@@ -39,7 +39,7 @@ include Awt2dLibraries.gmk
 ################################################################################
 # Create the libjsound library
 
-ifneq ($(OPENJDK_TARGET_OS), aix)
+ifeq ($(call isTargetOs, aix), false)
 ifneq ($(OPENJDK_TARGET_OS_ENV), bsd.openbsd)
 
   LIBJSOUND_CFLAGS := \
@@ -49,14 +49,14 @@ ifneq ($(OPENJDK_TARGET_OS_ENV), bsd.openbsd)
       -DUSE_DAUDIO=TRUE \
       #
 
-  ifeq ($(findstring $(OPENJDK_TARGET_OS), solaris bsd), )
+  ifeq ($(call isTargetOs, solaris bsd), false)
     LIBJSOUND_CFLAGS += \
         -DUSE_PLATFORM_MIDI_OUT=TRUE \
         -DUSE_PLATFORM_MIDI_IN=TRUE \
         #
   endif
 
-  ifeq ($(OPENJDK_TARGET_OS), macosx)
+  ifeq ($(call isTargetOs, macosx), true)
     LIBJSOUND_TOOLCHAIN := TOOLCHAIN_LINK_CXX
   endif
 
@@ -94,7 +94,7 @@ endif
 ################################################################################
 # Create the macosx specific osxapp and osx libraries
 
-ifeq ($(OPENJDK_TARGET_OS), macosx)
+ifeq ($(call isTargetOs, macosx), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBOSXAPP, \
       NAME := osxapp, \
@@ -150,4 +150,3 @@ ifeq ($(OPENJDK_TARGET_OS), macosx)
   $(BUILD_LIBOSX): $(call FindLib, java.base, java)
 
 endif
-

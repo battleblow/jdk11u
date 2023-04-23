@@ -27,18 +27,9 @@ include LibCommon.gmk
 
 ################################################################################
 
-ifeq ($(OPENJDK_TARGET_OS_TYPE), unix)
+ifeq ($(call isTargetOsType, unix), true)
 
-  # This feels like it should be detected by autoconf
-  SCTP_SUPPORTED=
-  ifeq ($(filter $(OPENJDK_TARGET_OS), macosx aix bsd), )
-    SCTP_SUPPORTED=true
-  endif
-  ifeq ($(OPENJDK_TARGET_OS_ENV), bsd.freebsd)
-    SCTP_SUPPORTED=true
-  endif
-
-  ifeq ($(SCTP_SUPPORTED), true)
+  ifeq ($(call isTargetOs, macosx aix bsd), false)
     $(eval $(call SetupJdkLibrary, BUILD_LIBSCTP, \
         NAME := sctp, \
         OPTIMIZATION := LOW, \
