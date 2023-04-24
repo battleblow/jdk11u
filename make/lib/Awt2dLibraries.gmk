@@ -830,7 +830,7 @@ ifeq ($(ENABLE_HEADLESS_ONLY), false)
   LIBSPLASHSCREEN_CFLAGS += -DSPLASHSCREEN -DPNG_NO_MMX_CODE \
                             -DPNG_ARM_NEON_OPT=0 -DPNG_ARM_NEON_IMPLEMENTATION=0
 
-  ifeq ($(call isTargetOs, linux), true)
+  ifeq ($(call isTargetOs, linux bsd), true)
     ifeq ($(call isTargetCpuArch, ppc), true)
       LIBSPLASHSCREEN_CFLAGS += -DPNG_POWERPC_VSX_OPT=0
     endif
