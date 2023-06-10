@@ -5071,7 +5071,7 @@ address MacroAssembler::has_negatives(Register ary1, Register len, Register resu
 
     int shift = 64 - exact_log2(os::vm_page_size());
     lsl(rscratch1, ary1, shift);
-    mov(rscratch2, (u_int64_t)(4 * wordSize) << shift);
+    mov(rscratch2, (uint64_t)(4 * wordSize) << shift);
     adds(rscratch2, rscratch1, rscratch2);  // At end of page?
     br(CS, STUB); // at the end of page then go to stub
     subs(len, len, wordSize);
