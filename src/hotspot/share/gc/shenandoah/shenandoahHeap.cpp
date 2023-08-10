@@ -1174,7 +1174,7 @@ bool ShenandoahHeap::block_is_obj(const HeapWord* addr) const {
 
 jlong ShenandoahHeap::millis_since_last_gc() {
   double v = heuristics()->time_since_last_gc() * 1000;
-  assert(0 <= v && v <= max_jlong, "value should fit: %f", v);
+  assert(0 <= v && v <= (double)max_jlong, "value should fit: %f", v);
   return (jlong)v;
 }
 
