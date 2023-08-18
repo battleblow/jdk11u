@@ -65,7 +65,7 @@ struct InCSetState {
   };
 
   InCSetState(in_cset_state_t value = NotInCSet) : _value(value) {
-    assert(is_valid(), "Invalid state %d", _value);
+    assert(is_valid(), "Invalid state %d", (int)_value);
   }
 
   in_cset_state_t value() const        { return _value; }
