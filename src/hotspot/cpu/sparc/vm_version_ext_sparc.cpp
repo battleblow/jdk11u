@@ -147,7 +147,7 @@ bool VM_Version_Ext::initialize_cpu_information(void) {
   kstat_close(kc);
   return true;
 }
-#elif defined(LINUX)
+#else
 // get cpu information.
 bool VM_Version_Ext::initialize_cpu_information(void) {
   // Not yet implemented.
