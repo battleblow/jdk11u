@@ -66,4 +66,4 @@ _Copy_conjoint_jlongs_atomic:
  _flush_reg_windows:
         ta 0x03
         retl
-        mov     %fp, %o0
+        add     %fp, 0x7ff, %o0
