@@ -841,6 +841,11 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_CPU_DEP],
     $1_TOOLCHAIN_CFLAGS="${$1_GCC6_CFLAGS}"
 
     $1_WARNING_CFLAGS_JVM="-Wno-format-zero-length -Wtype-limits -Wuninitialized"
+    if test "x$DEBUG_LEVEL" != xrelease; then
+      if test "x$FLAGS_CPU" = xsparcv9; then
+        $1_WARNING_CFLAGS_JVM="${$1_WARNING_CFLAGS_JVM} -Wno-format-security -Wno-format-nonliteral"
+      fi
+    fi
   fi
 
   if test "x$TOOLCHAIN_TYPE" = xmicrosoft && test "x$ENABLE_REPRODUCIBLE_BUILD" = xtrue; then
