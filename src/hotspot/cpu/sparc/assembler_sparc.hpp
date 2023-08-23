@@ -401,7 +401,7 @@ class Assembler : public AbstractAssembler {
   // fields: note bits numbered from LSB = 0, fields known by inclusive bit range
 
   static int fmask(juint hi_bit, juint lo_bit) {
-    assert(hi_bit >= lo_bit && 0 <= lo_bit && hi_bit < 32, "bad bits");
+    assert(hi_bit >= lo_bit && hi_bit < 32, "bad bits");
     return (1 << (hi_bit-lo_bit + 1)) - 1;
   }
 
