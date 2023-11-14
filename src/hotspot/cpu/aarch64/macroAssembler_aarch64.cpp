@@ -5843,22 +5843,6 @@ void MacroAssembler::char_array_compress(Register src, Register dst, Register le
   csel(result, result, zr, EQ);
 }
 
-#ifdef __OpenBSD__
-// OpenBSD uses emulated tls so it can't use aarch64_get_thread_helper().
-// Save whatever non-callee save context might get clobbered by
-// Thread::current.
-void MacroAssembler::get_thread(Register dst) {
-  RegSet saved_regs = RegSet::range(r0, r18_tls) + lr - dst;
-  push(saved_regs, sp);
-
-  MacroAssembler::call_VM_leaf_base(CAST_FROM_FN_PTR(address, Thread::current), 0);
-  if (dst != c_rarg0) {
-    mov(dst, c_rarg0);
-  }
-
-  pop(saved_regs, sp);
-}
-#else
 // get_thread() can be called anywhere inside generated code so we
 // need to save whatever non-callee save context might get clobbered
 // by the call to JavaThread::aarch64_get_thread_helper() or, indeed,
@@ -5882,4 +5866,3 @@ void MacroAssembler::get_thread(Register dst) {
 
   pop(saved_regs, sp);
 }
-#endif
