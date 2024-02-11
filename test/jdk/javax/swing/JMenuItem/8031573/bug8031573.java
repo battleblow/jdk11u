@@ -43,7 +43,7 @@ import javax.swing.text.JTextComponent;
  * @bug 8031573 8040279 8143064 8294427
  * @summary  Checkmarks of JCheckBoxMenuItems aren't rendered
  *           in high resolution on Retina
- * @requires (os.family != "linux")
+ * @requires (os.family != "linux" & os.family != "freebsd" & os.family != "netbsd" & os.family != "openbsd")
  * @run main/manual bug8031573
  */
 
