@@ -3744,7 +3744,7 @@ public:
     } else {
       assert(!obj->is_forwarded(), "invariant" );
       assert(cset_state.is_humongous(),
-             "Only allowed InCSet state is IsHumongous, but is %d", cset_state.value());
+             "Only allowed InCSet state is IsHumongous, but is %d", (int)cset_state.value());
      _g1h->set_humongous_is_live(obj);
     }
   }
