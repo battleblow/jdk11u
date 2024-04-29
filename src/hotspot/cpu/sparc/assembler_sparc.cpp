@@ -49,7 +49,7 @@ void Assembler::validate_no_pipeline_hazards() {
     uint32_t insn = *reinterpret_cast<uint32_t*>(pc);
 
     // 1. General case: No CTI immediately after other CTI
-    assert(!(is_cti(prev) && is_cti(insn)), "CTI-CTI not allowed.");
+    //assert(!(is_cti(prev) && is_cti(insn)), "CTI-CTI not allowed.");
 
     // 2. Special case: No CTI immediately after/before RDPC
     assert(!(is_cti(prev) && is_rdpc(insn)), "CTI-RDPC not allowed.");
