@@ -166,6 +166,8 @@ $(eval $(call SetupNativeCompilation, BUILD_LIBJVM, \
     abstract_vm_version.cpp_CXXFLAGS := $(CFLAGS_VM_VERSION), \
     arguments.cpp_CXXFLAGS := $(CFLAGS_VM_VERSION), \
     DISABLED_WARNINGS_gcc := stringop-overflow, \
+    DISABLED_WARNINGS_gcc_operator_new.cpp := system-headers, \
+    DISABLED_WARNINGS_gcc_macroAssembler_sparc.cpp := maybe-uninitialized, \
     DISABLED_WARNINGS_clang := tautological-compare switch \
         unnamed-type-template-args unused-function, \
     DISABLED_WARNINGS_solstudio := $(DISABLED_WARNINGS_solstudio), \
