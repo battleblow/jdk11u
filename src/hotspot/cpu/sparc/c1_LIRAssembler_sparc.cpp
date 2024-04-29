@@ -568,6 +568,7 @@ void LIR_Assembler::emit_opBranch(LIR_OpBranch* op) {
       case lir_cond_lessEqual:     acond = (is_unordered ? Assembler::f_unorderedOrLessOrEqual   : Assembler::f_lessOrEqual);    break;
       case lir_cond_greaterEqual:  acond = (is_unordered ? Assembler::f_unorderedOrGreaterOrEqual: Assembler::f_greaterOrEqual); break;
       default :                         ShouldNotReachHere();
+        acond = Assembler::equal;  // unreachable
     }
     __ fb( acond, false, Assembler::pn, *(op->label()));
   } else {
@@ -584,6 +585,7 @@ void LIR_Assembler::emit_opBranch(LIR_OpBranch* op) {
       case lir_cond_aboveEqual:   acond = Assembler::greaterEqualUnsigned; break;
       case lir_cond_belowEqual:   acond = Assembler::lessEqualUnsigned;    break;
       default:                         ShouldNotReachHere();
+        acond = Assembler::equal;  // unreachable
     };
 
     // sparc has different condition codes for testing 32-bit
@@ -1590,6 +1592,7 @@ void LIR_Assembler::cmove(LIR_Condition condition, LIR_Opr opr1, LIR_Opr opr2, L
     case lir_cond_aboveEqual:   acond = Assembler::greaterEqualUnsigned;      break;
     case lir_cond_belowEqual:   acond = Assembler::lessEqualUnsigned;      break;
     default:                         ShouldNotReachHere();
+      acond = Assembler::equal;  // unreachable
   };
 
   if (opr1->is_constant() && opr1->type() == T_INT) {
@@ -3283,6 +3286,7 @@ void LIR_Assembler::emit_assert(LIR_OpAssert* op) {
       case lir_cond_aboveEqual:   acond = Assembler::greaterEqualUnsigned; break;
       case lir_cond_belowEqual:   acond = Assembler::lessEqualUnsigned;    break;
       default:                         ShouldNotReachHere();
+        acond = Assembler::equal;  // unreachable
     };
     __ br(acond, false, Assembler::pt, ok);
     __ delayed()->nop();

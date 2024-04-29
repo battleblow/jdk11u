@@ -530,7 +530,8 @@ class Assembler : public AbstractAssembler {
      case FloatRegisterImpl::S: r = op + 0;  break;
      case FloatRegisterImpl::D: r = op + 3;  break;
      case FloatRegisterImpl::Q: r = op + 2;  break;
-     default: ShouldNotReachHere(); break;
+     default: ShouldNotReachHere();
+       r = 0; break; // unreachable
     }
     return op3(r);
   }
