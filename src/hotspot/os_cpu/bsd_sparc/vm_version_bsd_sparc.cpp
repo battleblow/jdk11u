@@ -121,13 +121,13 @@ typedef struct {
 } FeatureEntry;
 
 
-static uint64_t parse_features(FeatureEntry feature_tbl[], const char input[]);
-
 #ifdef __OpenBSD__
 void VM_Version::platform_features() {
   _features = ISA_v9_msk;   // Basic SPARC-V9 required (V8 not supported).
 }
 #else
+static uint64_t parse_features(FeatureEntry feature_tbl[], const char input[]);
+
 void VM_Version::platform_features() {
 
   // Some of the features reported via "cpucaps", such as; 'flush', 'stbar',
@@ -220,7 +220,6 @@ void VM_Version::platform_features() {
 
   _features += synthetic;   // Including CPU derived/synthetic features.
 }
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -354,3 +353,4 @@ static bool verify_match(const char name[], const char* ch1p, const char* endp) 
 
   return true;
 }
+#endif
