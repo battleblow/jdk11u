@@ -54,6 +54,7 @@ address JNI_FastGetField::generate_fast_get_int_field0(BasicType type) {
     case T_SHORT:   name = "jni_fast_GetShortField";   break;
     case T_INT:     name = "jni_fast_GetIntField";     break;
     default:        ShouldNotReachHere();
+      name = NULL; // unreachable
   }
   ResourceMark rm;
   BufferBlob* blob = BufferBlob::create(name, BUFFER_SIZE*wordSize);
@@ -106,6 +107,7 @@ address JNI_FastGetField::generate_fast_get_int_field0(BasicType type) {
     case T_SHORT:   slow_case_addr = jni_GetShortField_addr();   break;
     case T_INT:     slow_case_addr = jni_GetIntField_addr();     break;
     default:        ShouldNotReachHere();
+      slow_case_addr = NULL; // unreachable
   }
   __ bind (label2);
   __ call (slow_case_addr, relocInfo::none);
@@ -195,6 +197,7 @@ address JNI_FastGetField::generate_fast_get_float_field0(BasicType type) {
     case T_FLOAT:  name = "jni_fast_GetFloatField";  break;
     case T_DOUBLE: name = "jni_fast_GetDoubleField"; break;
     default:       ShouldNotReachHere();
+      name = NULL; // unreachable
   }
   ResourceMark rm;
   BufferBlob* blob = BufferBlob::create(name, BUFFER_SIZE*wordSize);
@@ -243,6 +246,7 @@ address JNI_FastGetField::generate_fast_get_float_field0(BasicType type) {
     case T_FLOAT:  slow_case_addr = jni_GetFloatField_addr();  break;
     case T_DOUBLE: slow_case_addr = jni_GetDoubleField_addr(); break;
     default:       ShouldNotReachHere();
+      slow_case_addr = NULL; // unreachable
   }
   __ bind (label2);
   __ call (slow_case_addr, relocInfo::none);

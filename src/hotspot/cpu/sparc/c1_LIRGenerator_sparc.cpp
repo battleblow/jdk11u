@@ -246,6 +246,7 @@ LIR_Opr LIRGenerator::load_immediate(int x, BasicType type) {
     r = LIR_OprFact::intConst(x);
   } else {
     ShouldNotReachHere();
+    r = NULL;  // unreachable
   }
   if (!Assembler::is_simm13(x)) {
     LIR_Opr tmp = new_register(type);
@@ -399,6 +400,7 @@ void LIRGenerator::do_ArithmeticOp_FPU(ArithmeticOp* x) {
       break;
     default:
       ShouldNotReachHere();
+      entry = NULL;  // unreachable
     }
     LIR_Opr result = call_runtime(x->x(), x->y(), entry, x->type(), NULL);
     set_result(x, result);
@@ -441,6 +443,7 @@ void LIRGenerator::do_ArithmeticOp_Long(ArithmeticOp* x) {
       break;
     default:
       ShouldNotReachHere();
+      entry = NULL; // unreachable
     }
 
     // order of arguments to runtime call is reversed.
@@ -931,6 +934,7 @@ void LIRGenerator::do_Convert(Convert* x) {
         break;
       default:
         ShouldNotReachHere();
+        entry = NULL; // unreachable
       }
       LIR_Opr result = call_runtime(x->value(), entry, x->type(), NULL);
       set_result(x, result);
