@@ -78,7 +78,9 @@ inline intptr_t* frame::unextended_sp() const { return sp() + _sp_adjustment_by_
 
 // return address:
 
+#ifndef STACKGHOST
 inline address  frame::sender_pc()        const    { return *I7_addr() + pc_return_offset; }
+#endif
 
 inline address* frame::I7_addr() const  { return (address*) &sp()[ I7->sp_offset_in_saved_window()]; }
 inline address* frame::I0_addr() const  { return (address*) &sp()[ I0->sp_offset_in_saved_window()]; }

@@ -171,6 +171,12 @@ void RegisterMap::shift_individual_registers() {
   check_location_valid();
 }
 
+#ifdef STACKGHOST
+address frame::sender_pc() const {
+  return (address)((intptr_t)*I7_addr() ^ sg_cookie()) + pc_return_offset;
+}
+#endif
+
 bool frame::safe_for_sender(JavaThread *thread) {
 
   address _SP = (address) sp();
@@ -228,7 +234,12 @@ bool frame::safe_for_sender(JavaThread *thread) {
     intptr_t* _SENDER_SP = sender_sp(); // sender is actually just _FP
     bool adjusted_stack = is_interpreted_frame();
 
+#ifdef STACKGHOST
+    address   sender_pc = (address)younger_sp[I7->sp_offset_in_saved_window()];
+    sender_pc = (address)((intptr_t)sender_pc ^ sg_cookie()) + pc_return_offset;
+#else
     address   sender_pc = (address)younger_sp[I7->sp_offset_in_saved_window()] + pc_return_offset;
+#endif
 
 
     // We must always be able to find a recognizable pc
@@ -355,7 +366,12 @@ frame::frame(intptr_t* sp, intptr_t* younger_sp, bool younger_frame_is_interpret
     _pc = NULL;
     _cb = NULL;
   } else {
+#ifdef STACKGHOST
+    _pc = (address)younger_sp[I7->sp_offset_in_saved_window()];
+    _pc = (address)((intptr_t)_pc ^ sg_cookie()) + pc_return_offset;
+#else
     _pc = (address)younger_sp[I7->sp_offset_in_saved_window()] + pc_return_offset;
+#endif
     assert( (intptr_t*)younger_sp[FP->sp_offset_in_saved_window()] == (intptr_t*)((intptr_t)sp - STACK_BIAS), "younger_sp must be valid");
     // Any frame we ever build should always "safe" therefore we should not have to call
     // find_blob_unsafe
@@ -417,6 +433,9 @@ void frame::pd_ps() {
   while (curr_sp != NULL && ((intptr_t)curr_sp & 7) == 0 && curr_sp > prev_sp && curr_sp < prev_sp+1000) {
     pc      = next_pc;
     next_pc = (intptr_t*) curr_sp[I7->sp_offset_in_saved_window()];
+#ifdef STACKGHOST
+    next_pc = (intptr_t*) ((intptr_t)next_pc ^ sg_cookie());
+#endif
     tty->print("[%d] curr_sp=" INTPTR_FORMAT " pc=", count, p2i(curr_sp));
     findpc((intptr_t)pc);
     if (WizardMode && Verbose) {
@@ -430,7 +449,11 @@ void frame::pd_ps() {
                     INTPTR_FORMAT " " INTPTR_FORMAT " " INTPTR_FORMAT " " INTPTR_FORMAT " "
                     INTPTR_FORMAT " " INTPTR_FORMAT " " INTPTR_FORMAT " " INTPTR_FORMAT " ",
                     curr_sp[8+0], curr_sp[8+1], curr_sp[8+2], curr_sp[8+3],
+#ifdef STACKGHOST
+                    curr_sp[8+4], curr_sp[8+5], curr_sp[8+6], curr_sp[8+7] ^ sg_cookie());
+#else
                     curr_sp[8+4], curr_sp[8+5], curr_sp[8+6], curr_sp[8+7]);
+#endif
       // (and print stack frame contents too??)
 
       CodeBlob *b = CodeCache::find_blob((address) pc);
@@ -570,7 +593,11 @@ void frame::patch_pc(Thread* thread, address pc) {
                   p2i(O7_addr()), p2i(_pc), p2i(pc));
   }
   _cb = CodeCache::find_blob(pc);
+#ifdef STACKGHOST
+  *O7_addr() = (address)((uintptr_t)(pc - pc_return_offset) ^ sg_cookie());
+#else
   *O7_addr() = pc - pc_return_offset;
+#endif
   _cb = CodeCache::find_blob(_pc);
   address original_pc = CompiledMethod::get_deopt_original_pc(this);
   if (original_pc != NULL) {
@@ -695,7 +722,12 @@ void JavaFrameAnchor::capture_last_Java_pc(intptr_t* sp) {
     // Really this should never fail otherwise VM call must have non-standard
     // frame linkage (bad) or stack is not properly flushed (worse).
     guarantee(_post_Java_sp != NULL, "bad stack!");
+#ifdef STACKGHOST
+    _last_Java_pc = (address) _post_Java_sp[ I7->sp_offset_in_saved_window()];
+    _last_Java_pc = (address)((intptr_t)_last_Java_pc ^ sg_cookie()) + frame::pc_return_offset;
+#else
     _last_Java_pc = (address) _post_Java_sp[ I7->sp_offset_in_saved_window()] + frame::pc_return_offset;
+#endif
 
   }
   set_window_flushed();

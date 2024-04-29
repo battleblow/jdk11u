@@ -836,6 +836,17 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_CPU_DEP],
     fi
   fi
 
+  # sparcv9 stackghost support
+  if test "x$OPENJDK_TARGET_OS_ENV" = xbsd.openbsd; then
+    AC_MSG_CHECKING([if StackGhost is supported])
+    if test "x$FLAGS_CPU" = xsparcv9; then
+      AC_MSG_RESULT([yes])
+      $1_CFLAGS_CPU_JVM="${$1_CFLAGS_CPU_JVM} -DSTACKGHOST"
+    else
+      AC_MSG_RESULT([no])
+    fi
+  fi
+
   if test "x$TOOLCHAIN_TYPE" = xgcc; then
     FLAGS_SETUP_GCC6_COMPILER_FLAGS($1, $3)
     $1_TOOLCHAIN_CFLAGS="${$1_GCC6_CFLAGS}"
