@@ -1122,9 +1122,25 @@ void RegistersForDebugging::save_registers(MacroAssembler* a) {
   a->flushw();
   int i;
   for (i = 0; i < 8; ++i) {
+#ifdef STACKGHOST
+    // I7/O7 needs special treatment here for sg_cookie
+    if (i == 7) {
+      a->ld_ptr(as_iRegister(i)->address_in_saved_window().after_save(), L1);
+      a->set(sg_cookie(), G3_scratch);
+      a->xor3(G3_scratch, L1, G3_scratch);
+      a->st_ptr(G3_scratch, O0, i_offset(i));
+      a->set(sg_cookie(), L1);
+      a->xor3(L1, as_oRegister(i)->after_save(), L1);
+      a->st_ptr(L1, O0, i_offset(i));
+    } else {
+      a->ld_ptr(as_iRegister(i)->address_in_saved_window().after_save(), L1);  a->st_ptr( L1, O0, i_offset(i));
+      a->st_ptr(as_oRegister(i)->after_save(), O0, o_offset(i));
+    }
+#else
     a->ld_ptr(as_iRegister(i)->address_in_saved_window().after_save(), L1);  a->st_ptr( L1, O0, i_offset(i));
-    a->ld_ptr(as_lRegister(i)->address_in_saved_window().after_save(), L1);  a->st_ptr( L1, O0, l_offset(i));
     a->st_ptr(as_oRegister(i)->after_save(), O0, o_offset(i));
+#endif
+    a->ld_ptr(as_lRegister(i)->address_in_saved_window().after_save(), L1);  a->st_ptr( L1, O0, l_offset(i));
     a->st_ptr(as_gRegister(i)->after_save(), O0, g_offset(i));
   }
   for (i = 0;  i < 32; ++i) {
@@ -1197,7 +1213,13 @@ void MacroAssembler::_verify_oop(Register reg, const char* msg, const char * fil
   stx(O0,SP,frame::register_save_words*wordSize+STACK_BIAS+0*8);
   stx(O1,SP,frame::register_save_words*wordSize+STACK_BIAS+1*8);
   mov(reg,O0); // Move arg into O0; arg might be in O7 which is about to be crushed
+#ifdef STACKGHOST
+  set(sg_cookie(), G3_scratch);
+  xor3(G3_scratch, O7, G3_scratch);
+  stx(G3_scratch,SP,frame::register_save_words*wordSize+STACK_BIAS+7*8);
+#else
   stx(O7,SP,frame::register_save_words*wordSize+STACK_BIAS+7*8);
+#endif
 
   // Size of set() should stay the same
   patchable_set((intptr_t)real_msg, O1);
@@ -1235,7 +1257,13 @@ void MacroAssembler::_verify_oop_addr(Address addr, const char* msg, const char 
   stx(O0,SP,frame::register_save_words*wordSize+STACK_BIAS+0*8);
   stx(O1,SP,frame::register_save_words*wordSize+STACK_BIAS+1*8);
   ld_ptr(addr.base(), addr.disp() + 8*8, O0); // Load arg into O0; arg might be in O7 which is about to be crushed
+#ifdef STACKGHOST
+  set(sg_cookie(), G3_scratch);
+  xor3(G3_scratch, O7, G3_scratch);
+  stx(G3_scratch,SP,frame::register_save_words*wordSize+STACK_BIAS+7*8);
+#else
   stx(O7,SP,frame::register_save_words*wordSize+STACK_BIAS+7*8);
+#endif
 
   // Size of set() should stay the same
   patchable_set((intptr_t)real_msg, O1);
@@ -1325,8 +1353,16 @@ void MacroAssembler::verify_oop_subroutine() {
   ldx(SP,frame::register_save_words*wordSize+STACK_BIAS+4*8,O4);
   ldx(SP,frame::register_save_words*wordSize+STACK_BIAS+5*8,O5);
 
+#ifdef STACKGHOST
+  // O7 needs special treatment here for sg_cookie
+  set(sg_cookie(), G3_scratch);
+  ldx(SP,frame::register_save_words*wordSize+STACK_BIAS+7*8,O7);
+  retl();                       // Leaf return; restore prior O7 in delay slot
+  delayed()->xor3(O7, G3_scratch, O7);
+#else
   retl();                       // Leaf return; restore prior O7 in delay slot
   delayed()->ldx(SP,frame::register_save_words*wordSize+STACK_BIAS+7*8,O7);
+#endif
 
   //-----------------------
   bind(null_or_fail);           // nulls are less common but OK
