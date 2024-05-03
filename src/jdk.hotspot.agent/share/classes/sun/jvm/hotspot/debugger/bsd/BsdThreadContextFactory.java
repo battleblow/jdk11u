@@ -30,6 +30,7 @@ import sun.jvm.hotspot.debugger.bsd.aarch64.*;
 import sun.jvm.hotspot.debugger.bsd.amd64.*;
 import sun.jvm.hotspot.debugger.bsd.x86.*;
 import sun.jvm.hotspot.debugger.bsd.ppc64.*;
+import sun.jvm.hotspot.debugger.bsd.sparc.*;
 
 class BsdThreadContextFactory {
    static ThreadContext createThreadContext(BsdDebugger dbg) {
@@ -38,6 +39,8 @@ class BsdThreadContextFactory {
          return new BsdX86ThreadContext(dbg);
       } else if (cpu.equals("amd64") || cpu.equals("x86_64")) {
          return new BsdAMD64ThreadContext(dbg);
+      } else if (cpu.equals("sparc")) {
+         return new BsdSPARCThreadContext(dbg);
       } else if (cpu.equals("ppc64")) {
           return new BsdPPC64ThreadContext(dbg);
       } else if (cpu.equals("aarch64")) {

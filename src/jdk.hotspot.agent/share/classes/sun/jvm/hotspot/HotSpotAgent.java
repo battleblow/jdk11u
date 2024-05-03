@@ -634,8 +634,10 @@ public class HotSpotAgent {
             machDesc = new MachineDescriptionPPC64();
         } else if (cpu.equals("aarch64")) {
             machDesc = new MachineDescriptionAArch64();
+        } else if (cpu.equals("sparc")) {
+            machDesc = new MachineDescriptionSPARC64Bit();
         } else {
-            throw new DebuggerException("BSD only supported on x86/x86_64/ppc64/aarch64. Current arch: " + cpu);
+            throw new DebuggerException("BSD only supported on x86/x86_64/ppc64/aarch64/sparc64. Current arch: " + cpu);
         }
 
         BsdDebuggerLocal dbg = new BsdDebuggerLocal(machDesc, !isServer);
