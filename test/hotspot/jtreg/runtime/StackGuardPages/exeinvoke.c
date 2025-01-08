@@ -34,7 +34,9 @@
 #include <assert.h>
 #include <jni.h>
 #include <jvm.h>
+#ifndef _BSDONLY_SOURCE
 #include <alloca.h>
+#endif
 #include <signal.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -46,6 +48,9 @@
 #include <errno.h>
 
 #include <pthread.h>
+#ifdef __FreeBSD__
+#include <pthread_np.h>
+#endif
 
 #define CLASS_PATH_OPT "-Djava.class.path="
 
@@ -58,9 +63,21 @@ static int _failures = 0;
 static int _rec_count = 0;
 static int _kp_rec_count = 0;
 
+#ifdef __FreeBSD__
+int gettid(void) {
+  return pthread_getthreadid_np();
+}
+int is_main_thread(void) {
+  return pthread_main_np();
+}
+#else
 pid_t gettid() {
   return (pid_t) syscall(SYS_gettid);
 }
+int is_main_thread(void) {
+  return gettid() == getpid();
+}
+#endif
 
 static void handler(int sig, siginfo_t *si, void *unused) {
   _last_si_code = si->si_code;
@@ -207,7 +224,7 @@ void *run_native_overflow(void *p) {
     exit(7);
   }
 
-  if (getpid() != gettid()) {
+  if (!is_main_thread()) {
     // For non-initial thread we don't unmap the region but call os::uncommit_memory and keep PROT_NONE
     // so if host has enough swap space we will get the same SEGV with code SEGV_ACCERR(2) trying
     // to access it as if the guard page is present.
