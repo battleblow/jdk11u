@@ -108,7 +108,7 @@ DISABLED_WARNINGS_microsoft :=
 ifeq ($(call And, $(call isTargetOs, linux) $(call isTargetCpu, arm)), true)
   JVM_EXCLUDE_PATTERNS += arm_64
 
-else ifeq ($(call And, $(call isTargetOs, bsd) $(call isTargetCpu, bsd-arm)), true)
+else ifeq ($(call And, $(call isTargetOs, bsd) $(call isTargetCpu, arm)), true)
   JVM_EXCLUDE_PATTERNS += arm_64
 
 else ifeq ($(call And, $(call isTargetOs, linux) $(call isTargetCpu, aarch64)), true)

@@ -76,9 +76,11 @@ typedef int bool;
 
 // This C bool type must be int for compatibility with BSD calls and
 // it would be a mistake to equivalence it to C++ bool on many platforms
+#if defined(__FreeBSD__) && !defined(__bool_true_false_are_defined)
 typedef int bool;
 #define true  1
 #define false 0
+#endif  // __FreeBSD__ && !__bool_true_false_are_defined
 
 #endif // __APPLE__
 
