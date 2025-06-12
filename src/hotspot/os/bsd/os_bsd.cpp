@@ -2390,33 +2390,26 @@ bool os::remove_stack_guard_pages(char* addr, size_t size) {
   return os::uncommit_memory(addr, size);
 }
 
-// If 'fixed' is true, anon_mmap() will attempt to reserve anonymous memory
-// at 'requested_addr'. If there are existing memory mappings at the same
-// location, however, they will be overwritten. If 'fixed' is false,
 // 'requested_addr' is only treated as a hint, the return value may or
 // may not start from the requested address. Unlike Bsd mmap(), this
 // function returns NULL to indicate failure.
-static char* anon_mmap(char* requested_addr, size_t bytes, bool fixed, bool executable = false) {
-  char * addr;
-  int flags;
+static char* anon_mmap(char* requested_addr, size_t bytes, bool exec) {
+  // MAP_FIXED is intentionally left out, to leave existing mappings intact.
+  int flags = MAP_PRIVATE | MAP_NORESERVE | MAP_ANONYMOUS
+      MACOS_ONLY(| (exec ? MAP_JIT : 0));
 
-  flags = MAP_PRIVATE | MAP_NORESERVE | MAP_ANONYMOUS;
-#ifdef __APPLE__
-  if (executable) {
-    guarantee(!fixed, "MAP_JIT (for execute) is incompatible with MAP_FIXED");
-    flags |= MAP_JIT;
+#if defined(__FreeBSD__) && defined(MAP_EXCL)
+  // On FreeBSD we can use MAP_FIXED with MAP_EXCL to have mmap fail if any part of the
+  // requested region is already mapped.
+  if (requested_addr != nullptr) {
+    flags |= MAP_FIXED | MAP_EXCL;
   }
 #endif
-  if (fixed) {
-    assert((uintptr_t)requested_addr % os::Bsd::page_size() == 0, "unaligned address");
-    flags |= MAP_FIXED;
-  }
 
   // Map reserved/uncommitted pages PROT_NONE so we fail early if we
   // touch an uncommitted page. Otherwise, the read/write might
   // succeed if we have enough swap space to back the physical page.
-  addr = (char*)::mmap(requested_addr, bytes, PROT_NONE,
-                       flags, -1, 0);
+  char* addr = (char*)::mmap(requested_addr, bytes, PROT_NONE, flags, -1, 0);
 
   return addr == MAP_FAILED ? NULL : addr;
 }
@@ -2429,12 +2422,12 @@ static int anon_munmap(char * addr, size_t size) {
 char* os::pd_reserve_memory(size_t bytes, char* requested_addr,
                             size_t alignment_hint,
                             bool executable) {
-  return anon_mmap(requested_addr, bytes, (requested_addr != NULL), executable);
+  return anon_mmap(requested_addr, bytes, executable);
 }
 #else
 char* os::pd_reserve_memory(size_t bytes, char* requested_addr,
                             size_t alignment_hint) {
-  return anon_mmap(requested_addr, bytes, (requested_addr != NULL));
+  return anon_mmap(requested_addr, bytes, false);
 }
 #endif
 
