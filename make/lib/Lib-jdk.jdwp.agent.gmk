@@ -63,6 +63,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJDWP, \
     DISABLED_WARNINGS_clang := self-assign format-nonliteral \
         sometimes-uninitialized, \
     DISABLED_WARNINGS_gcc := format-truncation, \
+    DISABLED_WARNINGS_microsoft_debugInit.c := 5287, \
     EXTRA_HEADER_DIRS := \
       include \
       libjdwp/export, \
