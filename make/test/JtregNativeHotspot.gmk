@@ -870,7 +870,7 @@ ifeq ($(call isTargetOs, linux bsd), true)
     BUILD_HOTSPOT_JTREG_EXECUTABLES_LIBS_exeinvoke := -ljvm $(PTHREAD)
     BUILD_HOTSPOT_JTREG_EXECUTABLES_LIBS_exestack-gap := -ljvm $(PTHREAD)
     BUILD_TEST_exeinvoke_exeinvoke.c_OPTIMIZATION := NONE
-    BUILD_HOTSPOT_JTREG_EXECUTABLES_LIBS_exeFPRegs := -ldl
+    BUILD_HOTSPOT_JTREG_EXECUTABLES_LIBS_exeFPRegs := $(LIBDL)
 else
   BUILD_HOTSPOT_JTREG_EXCLUDE += libtest-rw.c libtest-rwx.c libTestJNI.c \
       exeinvoke.c exestack-gap.c
