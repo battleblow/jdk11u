@@ -41,14 +41,16 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <stdlib.h>
+#ifndef __OpenBSD__
 #include <sys/ucontext.h>
+#endif
 #include <setjmp.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <errno.h>
 
 #include <pthread.h>
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <pthread_np.h>
 #endif
 
@@ -63,10 +65,16 @@ static int _failures = 0;
 static int _rec_count = 0;
 static int _kp_rec_count = 0;
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+#if defined(__FreeBSD__)
 int gettid(void) {
   return pthread_getthreadid_np();
 }
+#elif defined(__OpenBSD__)
+pid_t gettid() {
+  return getthrid();
+}
+#endif
 int is_main_thread(void) {
   return pthread_main_np();
 }
