@@ -956,7 +956,7 @@ void SafepointSynchronize::handle_polling_page_exception(JavaThread *thread) {
   }
 
   // Enable WXWrite: the function is called implicitly from java code.
-  MACOS_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
+  BSD_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
 
   if (PrintSafepointStatistics) {
     inc_page_trap_count();

@@ -1447,7 +1447,7 @@ address OptoRuntime::handle_exception_C(JavaThread* thread) {
 address OptoRuntime::rethrow_C(oopDesc* exception, JavaThread* thread, address ret_pc) {
 
   // Enable WXWrite: the function called directly by compiled code.
-  MACOS_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
+  BSD_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
 
 #ifndef PRODUCT
   SharedRuntime::_rethrow_ctr++;               // count rethrows

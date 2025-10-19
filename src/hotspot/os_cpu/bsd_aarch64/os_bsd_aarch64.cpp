@@ -989,6 +989,11 @@ JVM_handle_bsd_signal(int sig,
     assert(sig == info->si_signo, "bad siginfo");
   }
 */
+
+  // Enable WXWrite: this function is called by the signal handler at arbitrary
+  // point of execution.
+  ThreadWXEnable wx(WXWrite, thread);
+
   // decide if this trap can be handled by a stub
   address stub = NULL;
 

@@ -836,7 +836,7 @@ JRT_ENTRY(void, Runtime1::patch_code(JavaThread* thread, Runtime1::StubID stub_i
 
   // Enable WXWrite: the function is called by c1 stub as a runtime function
   // (see another implementation above).
-  MACOS_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
+  BSD_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
 
   ResourceMark rm(thread);
   RegisterMap reg_map(thread, false);

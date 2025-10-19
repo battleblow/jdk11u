@@ -2547,7 +2547,7 @@ void JavaThread::check_safepoint_and_suspend_for_native_trans(JavaThread *thread
 // thread state is _thread_in_native_trans.
 void JavaThread::check_special_condition_for_native_trans(JavaThread *thread) {
   // Enable WXWrite: called directly from interpreter native wrapper.
-  MACOS_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
+  BSD_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
 
   check_safepoint_and_suspend_for_native_trans(thread);
 
