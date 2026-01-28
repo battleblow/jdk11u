@@ -548,7 +548,7 @@ void coding_method::init(byte* &band_rp, byte* band_limit,
   assert(u != null);  // must be pre-initialized
   //if (u == null)  u = unpacker::current();  // expensive
 
-  int op = (meta_rp == null) ? _meta_default :  (*meta_rp++ & 0xFF);
+  int op = (meta_rp == null) ? (int)_meta_default :  (*meta_rp++ & 0xFF);
   coding* foundc = null;
   coding* to_free = null;
 
