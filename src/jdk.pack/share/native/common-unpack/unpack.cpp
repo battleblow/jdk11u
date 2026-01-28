@@ -1266,7 +1266,7 @@ void unpacker::read_single_refs(band& cp_band, byte refTag, entry* cpMap, int le
   cp_band.setIndexByTag(refTag);
   cp_band.readData(len);
   CHECK;
-  int indexTag = (cp_band.bn == e_cp_Class) ? CONSTANT_Class : 0;
+  int indexTag = (cp_band.bn == e_cp_Class) ? (int)CONSTANT_Class : 0;
   for (int i = 0; i < len; i++) {
     entry& e = cpMap[i];
     cp.initValues(e, tag, i, loadable_base);
