@@ -762,6 +762,7 @@ int os::sleep(Thread* thread, jlong millis, bool interruptible) {
   }
 }
 
+#ifndef __OpenBSD__
 void os::naked_short_nanosleep(jlong ns) {
   struct timespec req;
   assert(ns > -1 && ns < NANOUNITS, "Un-interruptable sleep, short time use only");
@@ -770,6 +771,7 @@ void os::naked_short_nanosleep(jlong ns) {
   ::nanosleep(&req, NULL);
   return;
 }
+#endif
 
 void os::naked_short_sleep(jlong ms) {
   assert(ms < MILLIUNITS, "Un-interruptable sleep, short time use only");
