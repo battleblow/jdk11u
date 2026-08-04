@@ -52,7 +52,11 @@ private:
   // in order to force correct alignment that could otherwise cause SIGBUS errors
   // when reading the member variables. This calculates the minimum number of card
   // array elements required to get that alignment.
+#if  (defined __sparc) && (defined _LP64)
+  static const size_t card_array_alignment = sizeof(long) / sizeof(card_elem_t);
+#else
   static const size_t card_array_alignment = sizeof(int) / sizeof(card_elem_t);
+#endif
 
   RegionIdx_t _region_ind;
   int         _next_index;
