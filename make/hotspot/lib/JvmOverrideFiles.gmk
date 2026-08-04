@@ -207,11 +207,6 @@ else ifeq ($(OPENJDK_TARGET_OS), bsd)
   BUILD_LIBJVM_loopTransform.cpp_CXXFLAGS := $(CXX_O_FLAG_NONE)
   ifneq ($(DEBUG_LEVEL), slowdebug)
     BUILD_LIBJVM_unsafe.cpp_CXXFLAGS := -O1
-    ifeq ($(call isTargetCpu, sparcv9), true)
-      ifeq ($(TOOLCHAIN_TYPE), gcc)
-        BUILD_LIBJVM_sparsePRT.cpp_CXXFLAGS := -O1
-      endif
-    endif
   endif
 
   ifeq ($(TOOLCHAIN_TYPE), gcc)
