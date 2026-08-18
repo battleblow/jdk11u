@@ -47,7 +47,7 @@ bool ElfDecoder::demangle(const char* symbol, char *buf, int buflen) {
   // of whether we pas in a mangled name or not, but it will barf out
   // a meaningless string if the symbol is not mangled. So we only pass
   // mangled names on to __cxa_demangle.
-  auto symlen = strlen(symbol);
+  size_t symlen = strlen(symbol);
   if (symlen < 2 || (symbol[0] != '_' && symbol[1] != 'Z')) {
     return false;
   }
